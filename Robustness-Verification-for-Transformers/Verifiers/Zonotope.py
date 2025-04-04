@@ -193,6 +193,25 @@ class Zonotope:
 
             # in general, the only indices that should have weight=eps are [i + 1, perturbed_word, i]
             # which means that the i-th coordinate of the embedding of the perturbed word should depend on the i-th error term
+
+
+
+
+
+            if self.eps > 1e-12:
+            if self.num_error_terms == self.num_words * self.word_embedding_size:
+                for flat_idx in range(self.num_error_terms):
+                    error_idx = flat_idx + 1 
+                    word_idx = flat_idx // self.word_embedding_size
+                    embed_idx = flat_idx % self.word_embedding_size
+
+                    if error_idx < self.zonotope_w.shape[0] and \
+                       word_idx < self.zonotope_w.shape[1] and \
+                       embed_idx < self.zonotope_w.shape[2]:
+                       self.zonotope_w[error_idx, word_idx, embed_idx] = self.eps
+            
+            
+            '''
             if self.args.all_words:
                 error_index = 1
 
@@ -203,7 +222,7 @@ class Zonotope:
             else:
                 for i in range(1, 1 + self.num_error_terms):
                     self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
-
+            '''
         self.num_input_error_terms: int = args.num_input_error_terms
         self.num_input_error_terms_special_norm = self.num_input_error_terms if (self.p == 1 or self.p == 2) else 0
 
