@@ -225,7 +225,7 @@ if __name__ == "__main__":
     k = 16
     pruning_layer = 1
 
-    x_input = torch.randn(2, in_chans, img_size, img_size)
+    x_input = torch.randn(1, in_chans, img_size, img_size)
 
     model = JointModel(
         k=k,
