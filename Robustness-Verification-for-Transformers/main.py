@@ -19,9 +19,6 @@ def main():
     args, _ = parser.parse_known_args(argv)
     args = update_arguments(args) 
 
-    if not hasattr(args, 'output_epsilon'):
-        raise ValueError("Argument --output_epsilon is required for pruning certification.")
-
     args.with_lirpa_transformer = False 
 
     if args.gpu != -1:
