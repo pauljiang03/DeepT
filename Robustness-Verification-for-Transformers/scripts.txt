@@ -1,0 +1,10 @@
+no pruning
+
+python main.py \
+    --k 16 \
+    --pruning_layer 5 \
+    --output_epsilon 0.1 \
+    --eps 0.01 \
+    --gpu 0 \
+
+pruning
