@@ -1199,6 +1199,64 @@ class Zonotope:
 
         return make_zonotope_new_weights_same_args(C, source_zonotope=self, clone=False)
 
+
+    def first_k_prune(self, k: int) -> "Zonotope":
+        prefix_token_count = 1
+        if self.zonotope_w.ndim == 3:
+             seq_dim = 1
+        else 
+             seq_dim = 2
+
+        current_seq_len = self.zonotope_w.shape[seq_dim]
+        max_seq_tokens = current_seq_len - prefix_token_count
+        if k < 0: k = 0
+        k = min(k, max_seq_tokens)
+        num_tokens_to_keep = prefix_token_count + k
+
+        if num_tokens_to_keep >= current_seq_len:
+             return self
+
+        slices = [slice(None)] * self.zonotope_w.ndim
+        slices[seq_dim] = slice(0, num_tokens_to_keep)
+        new_weights = self.zonotope_w[tuple(slices)].clone()
+
+        new_z = make_zonotope_new_weights_same_args(new_weights, source_zonotope=self, clone=False)
+        new_z.num_words = new_weights.shape[seq_dim] 
+
+        return new_z
+
+    def subtract(self, other: "Zonotope") -> "Zonotope":
+        num_errors_self = self.get_num_error_terms()
+        num_errors_other = other.get_num_error_terms()
+
+        if num_errors_self > num_errors_other:
+            self_exp = self
+            other_exp = other.expand_error_terms_to_match_zonotope(self)
+        elif num_errors_other > num_errors_self:
+            self_exp = self.expand_error_terms_to_match_zonotope(other)
+            other_exp = other
+        else: 
+            self_exp = self
+            other_exp = other
+
+        if self_exp.get_num_error_terms() != other_exp.get_num_error_terms():
+             print("Self has {self_exp.get_num_error_terms()}, Other has {other_exp.get_num_error_terms()}")
+
+        shape_dim_index = 0 if self_exp.zonotope_w.ndim <= 3 else 1
+        if self_exp.zonotope_w.shape[shape_dim_index+1:] != other_exp.zonotope_w.shape[shape_dim_index+1:]:
+             print("{self_exp.zonotope_w.shape} and {other_exp.zonotope_w.shape}")
+
+        new_weights = self_exp.zonotope_w - other_exp.zonotope_w
+
+        # Resetting error ranges (so this is bad, but I don't know how not to reset)
+        source_for_params = self if num_errors_self >= num_errors_other else other
+        new_z = make_zonotope_new_weights_same_args(new_weights, source_zonotope=source_for_params, clone=False)
+        new_z.error_term_range_low = None
+        new_z.error_term_range_high = None
+        return new_z
+
+
+    
     def divide(self, W: "Zonotope", use_original_reciprocal=True, y_positive_constraint=False) -> "Zonotope":
         if type(W) == Zonotope:
             if self.zonotope_w.ndim == 4:
