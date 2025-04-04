@@ -199,14 +199,14 @@ class Zonotope:
 
 
             if self.eps > 1e-12:
-            if self.num_error_terms == self.num_words * self.word_embedding_size:
-                for flat_idx in range(self.num_error_terms):
-                    error_idx = flat_idx + 1 
-                    word_idx = flat_idx // self.word_embedding_size
-                    embed_idx = flat_idx % self.word_embedding_size
+                if self.num_error_terms == self.num_words * self.word_embedding_size:
+                    for flat_idx in range(self.num_error_terms):
+                        error_idx = flat_idx + 1 
+                        word_idx = flat_idx // self.word_embedding_size
+                        embed_idx = flat_idx % self.word_embedding_size
 
-                    if error_idx < self.zonotope_w.shape[0] and word_idx < self.zonotope_w.shape[1] and embed_idx < self.zonotope_w.shape[2]:
-                       self.zonotope_w[error_idx, word_idx, embed_idx] = self.eps
+                        if error_idx < self.zonotope_w.shape[0] and word_idx < self.zonotope_w.shape[1] and embed_idx < self.zonotope_w.shape[2]:
+                           self.zonotope_w[error_idx, word_idx, embed_idx] = self.eps
             
             
             '''
