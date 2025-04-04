@@ -1,4 +1,4 @@
 # Copyright (c) 2020, Zhouxing shi <zhouxingshichn@gmail.com>
 # Licenced under the BSD 2-Clause License.
-from Verifiers.Verifier import Verifier
+#from Verifiers.Verifier import Verifier
 
