@@ -81,7 +81,7 @@ class Verifier:
             details,
             datetime.now().strftime('%b%d_%H-%M-%S')
         )
-
+    '''
     def run_sentence_attacks(self, data) -> Tuple[int, int, float]:
         """
         Returns:
@@ -193,7 +193,7 @@ class Verifier:
             sum_min += res[2]
 
         self.results_file.close()
-
+    '''
     def start_verification_new_input(self):
         pass
 
