@@ -246,8 +246,7 @@ if __name__ == "__main__":
     with torch.no_grad():
         result = model(x_input, return_full_info=True)
 
-    print("-" * 20)
-    print("Model Configuration:")
+    print("Model:")
     print(f"  k (tokens to keep): {k}")
     print(f"  Pruning Layer Index: {pruning_layer}")
     print(f"  Depth: {depth}")
@@ -256,25 +255,25 @@ if __name__ == "__main__":
     print(f"  MLP Dim: {mlp_dim}")
     print(f"  LayerNorm Type: {model.layer_norm_type}")
     print(f"  Patch Size: {patch_size}")
-    print("-" * 20)
-    print("Input & Output Shapes:")
+    print( )
+    print("Shapes:")
     print(f"  Input Shape: {x_input.shape}")
     print(f"  Unpruned Logits Shape: {result['unpruned_logits'].shape}")
     print(f"  Pruned Logits Shape: {result['pruned_logits'].shape}")
     print(f"  Logits Diff Shape: {result['logits_diff'].shape}")
-    print("-" * 20)
+    print( )
     print("Difference Metrics (Max over classes per batch element):")
     print(f"  Max Absolute Logit Difference (|P-P'|): {result['max_logit_diff_abs'].tolist()}")
     if 'max_prob_diff_abs' in result:
          print(f"  Max Absolute Probability Difference: {result['max_prob_diff_abs'].tolist()}")
-    print("-" * 20)
+    print( )
 
     original_tokens = model.num_patches + PREFIX_TOKEN_COUNT
     expected_pruned_tokens = original_tokens
     if model.pruning_layer < model.depth:
         expected_pruned_tokens = min(original_tokens, PREFIX_TOKEN_COUNT + model.k)
 
-    print("Token Count Information:")
+    print("Token Count:")
     print(f"  Original token count (incl. prefix): {original_tokens}")
     print(f"  Expected token count after pruning (layer {model.pruning_layer}): {expected_pruned_tokens} (kept {model.k} sequence tokens)")
     if original_tokens > 0:
