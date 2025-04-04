@@ -55,4 +55,12 @@ Max Diff Bound: 0.106999, Epsilon: 0.100000
 note: the max abs bounds are print statements from 147-153 and 161-167 from FirstKVerifier.py
 
 
+ISSUE:
+output of pruning 8 token (k=8, layer=5, eps=10.00) #eps is 100x but the outputs are still the same
+
+Max abs bound (Unpruned Path P): 0.513380
+Max abs bound (Pruned Path P'): 0.538270
+Max Diff Bound: 0.106999, Epsilon: 0.100000
+
+
 
