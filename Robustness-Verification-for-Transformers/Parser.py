@@ -10,6 +10,11 @@ class Parser(object):
     def get_parser():
         parser = argparse.ArgumentParser()
 
+        parser.add_argument("--embed_dim", type=int, default=64, help="Dimension of token embeddings.")
+        parser.add_argument("--k", type=int, required=True, help="Number of sequence tokens to keep for FirstK pruning (besides CLS).")
+        parser.add_argument("--pruning_layer", type=int, required=True, help="0-indexed layer *after which* to apply pruning.")
+        parser.add_argument('--output_epsilon', type=float, required=True, help='Target epsilon bound for ||P - P_prime||')
+
         # modes
         parser.add_argument("--train", action="store_true")
         parser.add_argument("--train-adversarial", action="store_true")
