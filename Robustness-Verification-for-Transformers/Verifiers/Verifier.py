@@ -33,17 +33,6 @@ class Verifier:
         self.perturbed_words = args.perturbed_words
         self.warmed = False
 
-        if not args.with_lirpa_transformer:
-            self.embeddings = target.model.bert.embeddings
-            self.encoding_layers = target.model.bert.encoder.layer
-            self.pooler = target.model.bert.pooler
-            self.classifier = target.model.classifier
-        else:  # LIRPA model
-            self.embeddings = target.model.embeddings
-            self.encoding_layers = target.model.model_from_embeddings.bert.encoder.layer
-            self.pooler = target.model.model_from_embeddings.bert.pooler
-            self.classifier = target.model.model_from_embeddings.classifier
-
         self.hidden_act = args.hidden_act
         self.layer_norm = target.model.config.layer_norm if hasattr(target.model.config, "layer_norm") else "standard"
 
@@ -68,17 +57,7 @@ class Verifier:
                 details += f"Variant12With{self.args.num_fast_dot_product_layers_due_to_switch}FastLayers"
             details += f"WithNoise{self.args.max_num_error_terms_fast_layers}Symbols"
 
-        self.res_filename = "{}_{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-            "resultsSynonym" if self.args.attack_type == "synonym" else "results",
-            args.data if not self.args.one_word_per_sentence else args.data + "Subset",   # SST or YELP
-            args.lirpa_ckpt.split("/")[1].split('_')[1] if self.args.attack_type == "synonym" else args.dir,  # 3, 6, 12
-            size,
-            "zonotopeSlow" if (args.method == "zonotope" and args.zonotope_slow) else args.method,  # zonotope vs baf
-            args.p if args.p <= 10 else 'inf',  # 1, 2, inf
-            "None_None" if reduc_method == "None" else f"{reduc_method}_{args.max_num_error_terms}",
-            details,
-            datetime.now().strftime('%b%d_%H-%M-%S')
-        )
+
     
     def run(self, data):
         pass
