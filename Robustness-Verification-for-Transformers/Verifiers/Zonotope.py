@@ -1202,9 +1202,9 @@ class Zonotope:
 
     def first_k_prune(self, k: int) -> "Zonotope":
         prefix_token_count = 1
-        if self.zonotope_w.ndim == 3:
-             seq_dim = 1
-        else 
+        if self.zonotope_w.ndim == 3:
+            seq_dim = 1
+        else 
              seq_dim = 2
 
         current_seq_len = self.zonotope_w.shape[seq_dim]
