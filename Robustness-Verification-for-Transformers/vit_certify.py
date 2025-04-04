@@ -23,8 +23,6 @@ args.num_input_error_terms = 28 * 28  # The norm constraints are on the whole im
 # Setting up the GPU
 if args.gpu != -1:
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
-if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # Settin up the CPU
 if psutil.cpu_count() > 4 and args.cpu_range != "Default":
