@@ -4,7 +4,23 @@ python main.py \
     --k 16 \
     --pruning_layer 5 \
     --output_epsilon 0.1 \
-    --eps 0.01 \
-    --gpu 0 \
+    --eps 0.00 \
+    --gpu 0 
 
 pruning
+
+python main.py \
+    --k 10 \                         #just change k to some value < 16 
+    --pruning_layer 3 \              #not quite sure how this changes things, just where pruning is pplied
+    --output_epsilon 0.1 \           #just value with which we want the output to be bound below (doesn't really do much)
+    --eps 1.0 \                      #i wish this did something, not sure the issue, probably my subtract function in zonotope.py
+    --gpu 0 
+
+notes: 
+
+- output shows the maximum possible absolute difference between the output logits of the unpruned model and the pruned model
+- k represents number of tokens kept
+- changes in pruning layer and k are reflected in the output as expected
+- eps doesn't seem to have any effect which is wrong 
+- baseline shows that when no pruning is done, output is 0 (this is correct)
+- can set --p value, but without defaults to 2
