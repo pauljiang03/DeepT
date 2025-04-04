@@ -24,7 +24,7 @@ def FirstKPrune(x: torch.Tensor, k: int) -> torch.Tensor:
     pruned_x = x[:, 0:num_tokens_to_keep, :]
     return pruned_x
 
-class CustomLayerNorm(nn.Module):
+class LayerNorm(nn.Module):
     def __init__(self, hidden_size, eps=1e-12, use_no_var_impl=True):
         super().__init__()
         self.weight = nn.Parameter(torch.ones(hidden_size))
@@ -51,7 +51,7 @@ class Residual(nn.Module):
 class PreNorm(nn.Module):
     def __init__(self, dim, fn, layer_norm_type='no_var'):
         super().__init__()
-        self.norm = CustomLayerNorm(dim, use_no_var_impl=(layer_norm_type == 'no_var'))
+        self.norm = LayerNorm(dim, use_no_var_impl=(layer_norm_type == 'no_var'))
         self.fn = fn
     def forward(self, x, **kwargs):
         return self.fn(self.norm(x), **kwargs)
@@ -69,7 +69,7 @@ class FeedForward(nn.Module):
     def forward(self, x):
         return self.net(x)
 
-class CustomAttention(nn.Module):
+class Attention(nn.Module):
     def __init__(self, dim, heads=8, dim_head=64, dropout=0.):
         super().__init__()
         inner_dim = dim_head * heads
@@ -95,17 +95,17 @@ class CustomAttention(nn.Module):
         out = self.to_out(out)
         return out
 
-class CustomViTBlock(nn.Module):
+class ViTBlock(nn.Module):
      def __init__(self, dim, heads, dim_head, mlp_dim, layer_norm_type='no_var', dropout=0.):
          super().__init__()
-         self.attn = Residual(PreNorm(dim, CustomAttention(dim, heads=heads, dim_head=dim_head, dropout=dropout), layer_norm_type))
+         self.attn = Residual(PreNorm(dim, Attention(dim, heads=heads, dim_head=dim_head, dropout=dropout), layer_norm_type))
          self.ff = Residual(PreNorm(dim, FeedForward(dim, mlp_dim, dropout=dropout), layer_norm_type))
      def forward(self, x):
          x = self.attn(x)
          x = self.ff(x)
          return x
 
-class UnifiedFirstKModel(nn.Module):
+class JointModel(nn.Module):
     def __init__(self, k: int = 100, img_size: int = 28, embed_dim: int = 64, num_classes: int = 10,
                  in_chans: int = 1, depth: int = 1, heads: int = 4, mlp_dim: int = 128,
                  pruning_layer: int = 0, layer_norm_type: str = 'no_var', dropout: float = 0.0,
@@ -146,11 +146,11 @@ class UnifiedFirstKModel(nn.Module):
         self.classification_head = nn.Linear(embed_dim, num_classes)
 
         self.unpruned_blocks = nn.ModuleList([
-            CustomViTBlock(dim=embed_dim, heads=heads, dim_head=dim_head, mlp_dim=mlp_dim, layer_norm_type=layer_norm_type, dropout=dropout)
+            ViTBlock(dim=embed_dim, heads=heads, dim_head=dim_head, mlp_dim=mlp_dim, layer_norm_type=layer_norm_type, dropout=dropout)
             for _ in range(depth)
         ])
         self.pruned_blocks = nn.ModuleList([
-            CustomViTBlock(dim=embed_dim, heads=heads, dim_head=dim_head, mlp_dim=mlp_dim, layer_norm_type=layer_norm_type, dropout=dropout)
+            ViTBlock(dim=embed_dim, heads=heads, dim_head=dim_head, mlp_dim=mlp_dim, layer_norm_type=layer_norm_type, dropout=dropout)
             for _ in range(depth)
         ])
 
@@ -233,7 +233,7 @@ if __name__ == "__main__":
 
     x_input = torch.randn(2, in_chans, img_size, img_size)
 
-    model = UnifiedFirstKModel(
+    model = JointModel(
         k=k,
         img_size=img_size,
         embed_dim=embed_dim,
