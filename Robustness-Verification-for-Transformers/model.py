@@ -280,4 +280,3 @@ if __name__ == "__main__":
         tokens_removed = original_tokens - expected_pruned_tokens
         percent_removed = (tokens_removed / original_tokens) * 100 if original_tokens > PREFIX_TOKEN_COUNT else 0
         print(f"  Tokens removed by pruning: {tokens_removed} ({percent_removed:.1f}%)")
-    print("-" * 20)
