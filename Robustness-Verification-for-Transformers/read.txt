@@ -4,16 +4,16 @@ python main.py \
     --k 16 \
     --pruning_layer 5 \
     --output_epsilon 0.1 \
-    --eps 0.00 \
+    --eps 0.01 \
     --gpu 0 
 
 pruning
 
 python main.py \
-    --k 10 \                         #just change k to some value < 16 
-    --pruning_layer 3 \              #not quite sure how this changes things, just where pruning is pplied
-    --output_epsilon 0.1 \           #just value with which we want the output to be bound below (doesn't really do much)
-    --eps 1.0 \                      #i wish this did something, not sure the issue, probably my subtract function in zonotope.py
+    --k 15 \                        
+    --pruning_layer 5 \             
+    --output_epsilon 0.1 \           
+    --eps 0.01 \                     
     --gpu 0 
 
 notes: 
@@ -32,4 +32,27 @@ main.py
 FirstKVerifier.py
 
 Parser.py lines 13-16
-Zonotope.py lines 201-209 and 1220-1274, commented out 212-223 
+Zonotope.py lines 201-209 and 1220-1274, commented out 212-223 and 904
+
+output of no pruning (baseline k=16, layer=5, eps=0.01)
+
+Max abs bound (Unpruned Path P): 0.513380
+Max abs bound (Pruned Path P'): 0.513380
+Max Diff Bound: 0.000000, Epsilon: 0.100000
+
+output of pruning 1 token (k=15, layer=5, eps=0.01)
+
+Max abs bound (Unpruned Path P): 0.513380
+Max abs bound (Pruned Path P'): 0.530449
+Max Diff Bound: 0.017069, Epsilon: 0.100000
+
+output of pruning 8 token (k=8, layer=5, eps=0.01)
+
+Max abs bound (Unpruned Path P): 0.513380
+Max abs bound (Pruned Path P'): 0.538270
+Max Diff Bound: 0.106999, Epsilon: 0.100000
+
+note: the max abs bounds are print statements from 147-153 and 161-167 from FirstKVerifier.py
+
+
+
