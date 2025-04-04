@@ -27,26 +27,6 @@ class Verifier:
 
         reduc_method = args.error_reduction_method
 
-        if "smaller" in args.dir:
-            size = "smaller"
-        elif "small" in args.dir:
-            size = "small"
-        else:
-            size = "big"
-
-        details = "NoConstraint" if (args.method != "zonotope" or not args.add_softmax_sum_constraint) else "WithConstraint"
-        if self.args.use_other_dot_product_ordering:
-            details += "OtherDotProductOrder"
-        if self.args.use_dot_product_variant3:
-            details += "DotProduceVariant3"
-        if self.args.num_fast_dot_product_layers_due_to_switch != -1:
-            if self.args.variant2plus1:
-                details += f"Variant21With{self.args.num_fast_dot_product_layers_due_to_switch}FastLayers"
-            else:
-                details += f"Variant12With{self.args.num_fast_dot_product_layers_due_to_switch}FastLayers"
-            details += f"WithNoise{self.args.max_num_error_terms_fast_layers}Symbols"
-
-
     
     def run(self, data):
         pass
