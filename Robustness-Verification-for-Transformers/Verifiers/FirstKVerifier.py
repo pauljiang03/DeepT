@@ -69,7 +69,7 @@ class FirstKVerifier(Verifier):
              results_file.close()
              return
 
-        print(f"Verifying {total_count} examples...")
+        print(f"Verifying {total_count} examples")
         for i, example in enumerate(examples):
             self.logger.write(f"--- Verifying Sample {i+1}/{total_count} ---")
             is_safe, max_abs_diff_bound, timing = self.check_pruning_bound(example, self.input_eps, self.output_epsilon)
@@ -144,7 +144,7 @@ class FirstKVerifier(Verifier):
                 if Z_logits_P is None: raise ValueError("Unpruned path propagation failed")
                 cleanup_memory()
 
-                print("  Concretizing unpruned path bounds...")
+                print("  Concretizing unpruned path bounds")
                 l_P, u_P = Z_logits_P.concretize()
                 if l_P is not None and u_P is not None:
                     max_abs_P = torch.max(torch.abs(l_P), torch.abs(u_P)).max().item()
@@ -158,7 +158,7 @@ class FirstKVerifier(Verifier):
                 cleanup_memory()
 
 
-                print("  Concretizing pruned path bounds...")
+                print("  Concretizing pruned path bounds")
                 l_P_prime, u_P_prime = Z_logits_P_prime.concretize()
                 if l_P_prime is not None and u_P_prime is not None:
                     max_abs_P_prime = torch.max(torch.abs(l_P_prime), torch.abs(u_P_prime)).max().item()
