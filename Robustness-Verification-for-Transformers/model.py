@@ -111,10 +111,6 @@ class JointModel(nn.Module):
                  pruning_layer: int = 0, layer_norm_type: str = 'no_var', dropout: float = 0.0,
                  patch_size: int = 7, pool: str = 'cls'):
         super().__init__()
-        if not (0 <= pruning_layer < depth):
-             raise ValueError(f"pruning_layer index ({pruning_layer}) out of bounds for depth ({depth})")
-        assert img_size % patch_size == 0, 'Image dimensions must be divisible by the patch size.'
-        assert pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
 
         self.k = k
         self.depth = depth
@@ -132,9 +128,7 @@ class JointModel(nn.Module):
         patch_dim = in_chans * patch_size ** 2
         self.num_patches = num_patches
         dim_head = embed_dim // heads
-        if embed_dim % heads != 0:
-             print(colored(f"Warning: embed_dim {embed_dim} not divisible by heads {heads}. Head dim calculated as {dim_head}.", "yellow"))
-
+       
         self.patch_embedder_rearrange = Rearrange('b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1=patch_size, p2=patch_size)
         self.patch_embedder_linear = nn.Linear(patch_dim, embed_dim)
 
@@ -142,7 +136,7 @@ class JointModel(nn.Module):
         self.prefix_tokens = nn.Parameter(torch.zeros(1, PREFIX_TOKEN_COUNT, embed_dim))
         self.input_dropout = nn.Dropout(dropout)
 
-        self.final_norm = CustomLayerNorm(embed_dim, use_no_var_impl=(layer_norm_type == 'no_var'))
+        self.final_norm = LayerNorm(embed_dim, use_no_var_impl=(layer_norm_type == 'no_var'))
         self.classification_head = nn.Linear(embed_dim, num_classes)
 
         self.unpruned_blocks = nn.ModuleList([
@@ -171,8 +165,8 @@ class JointModel(nn.Module):
 
     def _apply_pooling_and_head(self, x: torch.Tensor) -> torch.Tensor:
          if self.pool == 'mean':
-             x = x[:, PREFIX_TOKEN_COUNT:, :].mean(dim=1) # Example mean pooling (check if correct for your use)
-         else: # 'cls' pooling
+             x = x[:, PREFIX_TOKEN_COUNT:, :].mean(dim=1) 
+         else: 
              x = x[:, 0]
          x = self.final_norm(x)
          x = self.classification_head(x)
