@@ -6,7 +6,7 @@ from argparse import Namespace
 
 
 from Parser import Parser, update_arguments
-from Verifiers.FirstKVerfier import FirstKVerifier
+from Verifiers.FirstKVerifier import FirstKVerifier
 from model import JointModel
 from fake_logger import FakeLogger 
 from mnist import mnist_test_dataloader, normalizer 
