@@ -34,7 +34,7 @@ def sample_correct_samples(args, data, target):
 
 class FirstKVerifier(Verifier):
 
-    def __init__(self, args: Namespace, target: UnifiedFirstKModel, logger, num_classes: int, normalizer, output_epsilon: float):
+    def __init__(self, args: Namespace, target: JointModel, logger, num_classes: int, normalizer, output_epsilon: float):
         self.args = args
         self.device = args.device
         self.target_unified: JointModel = target.to(args.device)
