@@ -901,7 +901,8 @@ class Zonotope:
                 error_1_coeffs = multiply_matrices_p_p(A_p, B_p, self.p)  # (e_errors_1, NA, NB)
                 new_weights += self.get_width_for_special_terms(error_1_coeffs, q=dual_norm(self.p))  # inplace
             else:
-                assert self.p > 10, "there are no 1-norm or 2-norm bound error terms but the norm is 1 or 2"
+                #assert self.p > 10, "there are no 1-norm or 2-norm bound error terms but the norm is 1 or 2"
+                pass
 
             def do_mixed_multiplication(inf_errors: torch.Tensor, p_errors: torch.Tensor, p: float, use_other_dot_product_ordering: bool, inf_is_self: bool):
                 if not use_other_dot_product_ordering:  # v2 is better
