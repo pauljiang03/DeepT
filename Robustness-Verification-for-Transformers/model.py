@@ -243,8 +243,6 @@ if __name__ == "__main__":
     )
     model.eval()
 
-    print("-" * 20)
-    print("Running Model Forward Pass...")
     with torch.no_grad():
         result = model(x_input, return_full_info=True)
 
