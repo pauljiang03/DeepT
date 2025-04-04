@@ -3,10 +3,5 @@
 
 from Verifiers.Bounds import Bounds
 from Verifiers.Verifier import Verifier
-from Verifiers.VerifierForward import VerifierForward
-from Verifiers.VerifierDiscrete import VerifierDiscrete
-from Verifiers.VerifierForwardCombination import VerifierForwardConvexCombination
-from Verifiers.VerifierBackwardCombination import VerifierBackwardConvexCombination
-from Verifiers.VerifierBackwardForwardCombination import VerifierBackwardForwardConvexCombination
 from Verifiers.VerifierZonotope import VerifierZonotope
 
