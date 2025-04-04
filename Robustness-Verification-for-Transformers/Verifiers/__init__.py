@@ -3,5 +3,4 @@
 
 from Verifiers.Bounds import Bounds
 from Verifiers.Verifier import Verifier
-from Verifiers.VerifierZonotope import VerifierZonotope
 
