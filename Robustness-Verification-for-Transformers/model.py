@@ -222,7 +222,7 @@ if __name__ == "__main__":
     depth = 3
     heads = 4
     mlp_dim = 128
-    k = 8
+    k = 16
     pruning_layer = 1
 
     x_input = torch.randn(2, in_chans, img_size, img_size)
