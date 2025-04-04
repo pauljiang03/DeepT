@@ -11,8 +11,8 @@ from typing import Tuple, Optional
 from termcolor import colored
 
 from Verifiers.Zonotope import cleanup_memory
-from Verifiers.synonym_attack import get_zonotope_weights_representing_embeddings_for_sentence_and_synonyms, \
-    get_zonotope_weights_representing_embeddings_for_sentence_and_synonyms_l_norm
+#from Verifiers.synonym_attack import get_zonotope_weights_representing_embeddings_for_sentence_and_synonyms, \
+    #get_zonotope_weights_representing_embeddings_for_sentence_and_synonyms_l_norm
 from data_utils import sample, get_all_correctly_classified_samples, compute_accuracy
 
 
