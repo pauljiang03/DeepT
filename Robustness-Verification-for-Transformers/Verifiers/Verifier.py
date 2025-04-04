@@ -1,17 +1,6 @@
-# Copyright (c) 2020, Zhouxing shi <zhouxingshichn@gmail.com>
-# Licenced under the BSD 2-Clause License.
-from datetime import datetime
-from pathlib import Path
-import time
-
 import os
 import torch
 from typing import Tuple, Optional
-
-from termcolor import colored
-
-from Verifiers.Zonotope import cleanup_memory
-from data_utils import sample, get_all_correctly_classified_samples, compute_accuracy
 
 class Verifier:
     def __init__(self, args, target, logger):
