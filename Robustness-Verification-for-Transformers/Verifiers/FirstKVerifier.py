@@ -199,8 +199,13 @@ class FirstKVerifier(Verifier):
                           start_perturbation=0,
                           end_perturbation=num_input_errors
                          )
+        print(f"Shape of initial bounds.zonotope_w: {bounds.zonotope_w.shape if hasattr(bounds, 'zonotope_w') else 'No zonotope_w'}")
+        print(f"Number of error terms in initial bounds: {bounds.get_num_error_terms() if hasattr(bounds, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
 
         bounds = bounds.dense(self.target_unified.patch_embedder_linear)
+        print(f"Shape of bounds.zonotope_w after patch embedder: {bounds.zonotope_w.shape if hasattr(bounds, 'zonotope_w') else 'No zonotope_w'}")
+        print(f"Number of error terms after patch embedder: {bounds.get_num_error_terms() if hasattr(bounds, 'get_num_error_terms') else 'No get_num_error_terms'}")
 
         if bounds.zonotope_w.ndim == 3: 
             e, n, d = bounds.zonotope_w.shape
@@ -220,6 +225,9 @@ class FirstKVerifier(Verifier):
         pos_embed = self.target_unified.pos_embed[:, :bounds.num_words, :]
         bounds = bounds.add(pos_embed)
 
+        print(f"Shape of final bounds.zonotope_w in _bound_input_unified: {bounds.zonotope_w.shape if hasattr(bounds, 'zonotope_w') else 'No zonotope_w'}")
+        print(f"Number of error terms in final bounds of _bound_input_unified: {bounds.get_num_error_terms() if hasattr(bounds, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
         return bounds
 
 
@@ -228,12 +236,22 @@ class FirstKVerifier(Verifier):
         k_for_pruning = target_model.k
         pruning_layer_index = target_model.pruning_layer
 
+        
+        print(f"\n--- Starting _propagate_path (apply_pruning: {apply_pruning}) ---")
+        print(f"Shape of Z_current.zonotope_w at start: {Z_current.zonotope_w.shape if hasattr(Z_current, 'zonotope_w') else 'No zonotope_w'}")
+        print(f"Number of error terms in Z_current at start: {Z_current.get_num_error_terms() if hasattr(Z_current, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
         for i, block in enumerate(blocks):
             Z_res_attn = Z_current.clone()
             norm_layer_attn = block.attn.fn.norm
             Z_normed_attn = Z_current.layer_norm(norm_layer_attn, target_model.layer_norm_type)
+            print(f"Shape after attn layer norm: {Z_normed_attn.zonotope_w.shape if hasattr(Z_normed_attn, 'zonotope_w') else 'No zonotope_w'}")
+            print(f"Error terms after attn layer norm: {Z_normed_attn.get_num_error_terms() if hasattr(Z_normed_attn, 'get_num_error_terms') else 'No get_num_error_terms'}")
             attn_module = block.attn.fn.fn
             Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+            print(f"Shape after attention: {Z_attn_output.zonotope_w.shape if hasattr(Z_attn_output, 'zonotope_w') else 'No zonotope_w'}")
+            print(f"Error terms after attention: {Z_attn_output.get_num_error_terms() if hasattr(Z_attn_output, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
 
             Z_res_attn = Z_res_attn.expand_error_terms_to_match_zonotope(Z_attn_output)
             Z_attn_output = Z_attn_output.expand_error_terms_to_match_zonotope(Z_res_attn)
