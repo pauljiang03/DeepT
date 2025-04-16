@@ -1924,6 +1924,11 @@ class Zonotope:
 
         l, u = self.concretize()
 
+        numeric_stability_epsilon = 1e-12
+        l = torch.clamp(l, min=numeric_stability_epsilon)
+        # Optional: Ensure upper bound is also positive if lower bound was clamped
+        u = torch.clamp(u, min=numeric_stability_epsilon)
+
         if torch.min(l) <= epsilon:
             num_negative_elements = (l <= epsilon).float().sum().item()
             num_elements = l.nelement()
