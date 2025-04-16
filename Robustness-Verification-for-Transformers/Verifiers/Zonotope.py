@@ -145,6 +145,9 @@ class Zonotope:
         self.dual_p = dual_norm(p)
         self.eps = eps
 
+        print(f"\n--- Inside Zonotope.__init__ ---")
+        print(f"Received eps in Zonotope: {eps}")
+
         assert args.perturbed_words == 1 or self.args.attack_type == "synonym", "We assume there is only one perturbed word in the Zonotope implementation"
         self.perturbed_word_index = perturbed_word_index
 
