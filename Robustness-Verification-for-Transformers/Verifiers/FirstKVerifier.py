@@ -200,7 +200,11 @@ class FirstKVerifier(Verifier):
         image_r = rearrange(image, 'b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1=patch_size, p2=patch_size)
         image_patched = image_r.squeeze(0)
 
+        print(f"\n--- Inside _bound_input_unified ---")
+        print(f"Input eps (received): {eps}")
+
         eps_scaled = eps / self.normalizer.std[0]
+        print(f"Scaled eps: {eps_scaled}")
         num_input_errors = image_patched.nelement() if eps > 0 else 0 
         self.args.num_input_error_terms = num_input_errors 
         bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
