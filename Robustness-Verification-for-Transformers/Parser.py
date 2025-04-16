@@ -64,7 +64,7 @@ class Parser(object):
         parser.add_argument("--layer_norm", type=str, default="no_var", choices=["standard", "no", "no_var"])
 
         # verification
-        parser.add_argument("--samples", type=int, default=10)
+        parser.add_argument("--samples", type=int, default=1)
         parser.add_argument("--p", type=int, default=2)
         parser.add_argument("--eps", type=float, default=1e-5)
         parser.add_argument("--max_eps", type=float, default=0.01)
