@@ -169,14 +169,18 @@ class Zonotope:
                 self.word_embedding_size = zonotope_w.shape[3]
         else:
             self.num_words, self.word_embedding_size = value.shape
+            num_input_features = self.num_words * self.word_embedding_size
 
             start = 1 if start_perturbation is None else start_perturbation
             end = self.num_words - 1 if end_perturbation is None else end_perturbation
 
-            if self.args.all_words:
+            '''if self.args.all_words:
                 self.num_error_terms = self.word_embedding_size * (end - start)
             else:
-                self.num_error_terms = self.word_embedding_size
+                self.num_error_terms = self.word_embedding_size'''
+            
+            self.num_error_terms = num_input_features
+
 
             self.zonotope_w = torch.zeros([
                 1 + self.num_error_terms,  # Bias + error terms for the perturbed word
@@ -224,7 +228,8 @@ class Zonotope:
                 for i in range(1, 1 + self.num_error_terms):
                     self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
             '''
-        self.num_input_error_terms: int = args.num_input_error_terms
+        #self.num_input_error_terms: int = args.num_input_error_terms
+        self.num_input_error_terms: int = self.num_error_terms 
         self.num_input_error_terms_special_norm = self.num_input_error_terms if (self.p == 1 or self.p == 2) else 0
 
     def to_device(self, val: torch.Tensor):
