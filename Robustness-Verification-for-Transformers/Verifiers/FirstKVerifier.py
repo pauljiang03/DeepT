@@ -143,6 +143,8 @@ class FirstKVerifier(Verifier):
                 Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
                 if Z_logits_P is None: raise ValueError("Unpruned path propagation failed")
                 cleanup_memory()
+                print(f"Shape of Z_logits_P before concretize: {Z_logits_P.zonotope_w.shape if hasattr(Z_logits_P, 'zonotope_w') else 'No zonotope_w'}")
+
 
                 print("  Concretizing unpruned path bounds")
                 l_P, u_P = Z_logits_P.concretize()
@@ -151,11 +153,15 @@ class FirstKVerifier(Verifier):
                     print(f"  Max abs bound (Unpruned Path P): {max_abs_P:.6f}")
                 else:
                     print("  Concretization failed for Unpruned Path P.")
+                print(f"Shape of l_P: {l_P.shape if l_P is not None else 'None'}, Shape of u_P: {u_P.shape if u_P is not None else 'None'}")
+
 
 
                 Z_logits_P_prime = self._propagate_path(Z_input.clone(), self.target_unified.pruned_blocks, apply_pruning=True)
                 if Z_logits_P_prime is None: raise ValueError("Pruned path propagation failed")
                 cleanup_memory()
+                print(f"Shape of Z_logits_P_prime before concretize: {Z_logits_P_prime.zonotope_w.shape if hasattr(Z_logits_P_prime, 'zonotope_w') else 'No zonotope_w'}")
+
 
 
                 print("  Concretizing pruned path bounds")
@@ -165,9 +171,14 @@ class FirstKVerifier(Verifier):
                     print(f"  Max abs bound (Pruned Path P'): {max_abs_P_prime:.6f}")
                 else:
                     print("  Concretization failed for Pruned Path P'.")
+                print(f"Shape of l_P_prime: {l_P_prime.shape if l_P_prime is not None else 'None'}, Shape of u_P_prime: {u_P_prime.shape if u_P_prime is not None else 'None'}")
+
 
 
                 Z_diff = Z_logits_P.subtract(Z_logits_P_prime)
+                print(f"Shape of Z_diff before concretize: {Z_diff.zonotope_w.shape if hasattr(Z_diff, 'zonotope_w') else 'No zonotope_w'}")
+                l_diff, u_diff = Z_diff.concretize()
+                print(f"Shape of l_diff: {l_diff.shape if l_diff is not None else 'None'}, Shape of u_diff: {u_diff.shape if u_diff is not None else 'None'}")
                 return Z_diff
 
         except Exception as err:
@@ -256,16 +267,27 @@ class FirstKVerifier(Verifier):
             Z_res_attn = Z_res_attn.expand_error_terms_to_match_zonotope(Z_attn_output)
             Z_attn_output = Z_attn_output.expand_error_terms_to_match_zonotope(Z_res_attn)
             Z_current = Z_attn_output.add(Z_res_attn)
+            print(f"Shape after residual + attn: {Z_current.zonotope_w.shape if hasattr(Z_current, 'zonotope_w') else 'No zonotope_w'}")
+            print(f"Error terms after residual + attn: {Z_current.get_num_error_terms() if hasattr(Z_current, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
 
             Z_res_ff = Z_current.clone()
             norm_layer_ff = block.ff.fn.norm
             Z_normed_ff = Z_current.layer_norm(norm_layer_ff, target_model.layer_norm_type)
+            print(f"Shape after ff layer norm: {Z_normed_ff.zonotope_w.shape if hasattr(Z_normed_ff, 'zonotope_w') else 'No zonotope_w'}")
+            print(f"Error terms after ff layer norm: {Z_normed_ff.get_num_error_terms() if hasattr(Z_normed_ff, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
             ff_module = block.ff.fn.fn
             Z_ff_output = self._bound_feed_forward_custom(Z_normed_ff, ff_module)
+            print(f"Shape after feed forward: {Z_ff_output.zonotope_w.shape if hasattr(Z_ff_output, 'zonotope_w') else 'No zonotope_w'}")
+            print(f"Error terms after feed forward: {Z_ff_output.get_num_error_terms() if hasattr(Z_ff_output, 'get_num_error_terms') else 'No get_num_error_terms'}")
 
             Z_res_ff = Z_res_ff.expand_error_terms_to_match_zonotope(Z_ff_output)
             Z_ff_output = Z_ff_output.expand_error_terms_to_match_zonotope(Z_res_ff)
             Z_current = Z_ff_output.add(Z_res_ff)
+            print(f"Shape after residual + ff: {Z_current.zonotope_w.shape if hasattr(Z_current, 'zonotope_w') else 'No zonotope_w'}")
+            print(f"Error terms after residual + ff: {Z_current.get_num_error_terms() if hasattr(Z_current, 'get_num_error_terms') else 'No get_num_error_terms'}")
+
 
             if apply_pruning and i == pruning_layer_index:
                  Z_current = Z_current.first_k_prune(k_for_pruning)
