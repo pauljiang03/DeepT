@@ -494,13 +494,59 @@ class Zonotope:
         else:
             raise Exception("Zonotope W should have 3 or 4 dimensions")
 
+
+        if torch.isnan(center).any() or torch.isinf(center).any():
+            print(">>> NaN/Inf detected in center (start of concretize) <<<")
+            assert False, "Stopping due to NaN/Inf in center"
+        if torch.isnan(error_terms).any() or torch.isinf(error_terms).any():
+            print(">>> NaN/Inf detected in error_terms (start of concretize) <<<")
+            if not torch.isinf(error_terms).all(): 
+                finite_mask = torch.isfinite(error_terms)
+                if finite_mask.any():
+                    print(f">>> Max abs finite coeff in error_terms: {error_terms[finite_mask].abs().max()} <<<")
+                else:
+                    print(">>> No finite values in error_terms <<<")
+            assert False, "Stopping due to NaN/Inf in error_terms"
+        print(f">>> Max abs coeff in initial error_terms: {error_terms.abs().max()} <<<") # Check magnitude regardless
+
         if self.error_term_range_low is None:
             assert self.error_term_range_high is None, "error_term_range_low is None but error_term_range_high is not None"
             sum_dim = 0 if self.zonotope_w.ndim <= 3 else 1  # if there are 4 dims, the error terms are in the dim 1 and not 0
             input_special_norm_errors, infinity_errors = self.get_input_special_errors_and_new_error_terms(error_terms)
 
+            inf_width = torch.zeros_like(center)
+            if infinity_errors.numel() > 0:
+                print(f">>> Max abs coeff in infinity_errors: {infinity_errors.abs().max()} <<<")
+                inf_width = get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
+                if torch.isnan(inf_width).any() or torch.isinf(inf_width).any():
+                    print(">>> NaN/Inf detected in inf_width (inside concretize) <<<")
+                    assert False, "Stopping due to NaN/Inf in inf_width"
+            else:
+                print(">>> No infinity_errors found <<<")
+
+            special_width = torch.zeros_like(center)
+            if self.p == 1 or self.p == 2:
+                if input_special_norm_errors.numel() > 0:
+                    print(f">>> Max abs coeff in input_special_norm_errors: {input_special_norm_errors.abs().max()} <<<")
+                    special_width = self.get_width_for_special_terms(input_special_norm_errors)
+                    if torch.isnan(special_width).any() or torch.isinf(special_width).any():
+                        print(">>> NaN/Inf detected in special_width (inside concretize) <<<")
+                        assert False, "Stopping due to NaN/Inf in special_width"
+                else:
+                    print(">>> No input_special_norm_errors found (or p != 1 or 2) <<<")
+
             lower = center - get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
             upper = center + get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
+
+            if torch.isnan(lower).any() or torch.isinf(lower).any():
+                print(">>> NaN/Inf detected in final lower bound (inside concretize) <<<")
+                assert False, "Stopping due to NaN/Inf in lower bound calculation"
+            if torch.isnan(upper).any() or torch.isinf(upper).any():
+                print(">>> NaN/Inf detected in final upper bound (inside concretize) <<<")
+                print(f"    center min/max: {center.min()}, {center.max()}")
+                print(f"    inf_width min/max: {inf_width.min()}, {inf_width.max()}")
+                print(f"    special_width min/max: {special_width.min()}, {special_width.max()}")
+                assert False, "Stopping due to NaN/Inf in upper bound calculation"
 
             if self.p == 1 or self.p == 2:
                 width = self.get_width_for_special_terms(input_special_norm_errors)
