@@ -1916,6 +1916,8 @@ class Zonotope:
         Returns a new zonotope representing the reciprocal of the values in this zonotope.
         Requirement: x should be guaranteed to be positive
         """
+        print(f">>> DEBUG: Entering reciprocal with original_implementation = {original_implementation} <<<")
+
         y_positive_constraint = True
 
         if self.zonotope_w.ndim == 4:
