@@ -2549,15 +2549,20 @@ def process_values(input_zonotope_w: torch.Tensor, source_zonotope: "Zonotope", 
     # Middle shape: (A, 1 + num_error_terms, num_rows, num_values, num_values)
     # such that w[A, E, N, i, j] = rowN_j - rowN_i
     vals_w = input_zonotope_w.unsqueeze(-1)  # (A, 1 + num_error_terms, num_rows, num_values, 1)
+    if torch.isnan(vals_w).any(): print(">>> NaN found in vals_w <<<") # Check input after unsqueeze
+
     vals_w_repeated = vals_w.repeat(1, 1, 1, 1, num_values)  # (A, 1 + num_error_terms, num_rows, num_values, num_values)
+    if torch.isnan(vals_w_repeated).any(): print(">>> NaN found in vals_w_repeated <<<") # Check after repeat
 
     diffs_w = vals_w_repeated.transpose(3, 4) - vals_w_repeated
-
+    if torch.isnan(diffs_w).any(): print(">>> NaN found in diffs_w (after subtraction) <<<") # Check immediately after subtraction
+        
     if not keep_intermediate_zonotopes:
         del vals_w_repeated; cleanup_memory()
 
     # End shape: (1 + num_error_terms, A * num_rows, num_values * num_values)?
     diffs_w_reshaped = diffs_w.permute(1, 0, 2, 3, 4).reshape(1 + source_zonotope.num_error_terms, A * num_rows, num_values * num_values)
+    if torch.isnan(diffs_w_reshaped).any(): print(">>> NaN found in diffs_w_reshaped <<<") # Check after reshape
 
     zonotope_diffs = make_zonotope_new_weights_same_args(diffs_w_reshaped, source_zonotope, clone=False)
     cleanup_memory()
