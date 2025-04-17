@@ -2070,13 +2070,11 @@ class Zonotope:
             if torch.isnan(term2).any() or torch.isinf(term2).any(): print(f">>> NaN/Inf detected in term2 (t_opt_recip) <<<")
             if torch.isnan(term3).any() or torch.isinf(term3).any(): print(f">>> NaN/Inf detected in term3 (X) <<<")
 
-
+            NEW_CONSTS = 0.5 * (t_opt.reciprocal() - lambdas * t_opt + X)
 
             NEW_COEFFS = 0.5 * (term1 - term2 + term3)
             if torch.isnan(NEW_COEFFS).any(): print(f">>> NaN calculated in NEW_COEFFS <<<")
 
-
-            #NEW_CONSTS = 0.5 * (t_opt.reciprocal() - lambdas * t_opt + X)
             #NEW_COEFFS = 0.5 * (lambdas * t_opt - t_opt.reciprocal() + X)
 
         # INTERCEPT = (t_opt.reciprocal() - lambdas * t_opt)
