@@ -1991,19 +1991,93 @@ class Zonotope:
             NEW_CONSTS = 0.5 * (T + B)
             NEW_COEFFS = 0.5 * (T - B)
         else:
+
+            safe_denominator = u - l + 1e-12 # Add small epsilon to prevent division by zero
+            if (safe_denominator == 0).any(): print(">>> WARNING: safe_denominator is exactly zero for some elements <<<")
+
+            mean_slope = (u.reciprocal() - l.reciprocal()) / safe_denominator
+            if torch.isnan(mean_slope).any() or torch.isinf(mean_slope).any():
+                print(f">>> NaN/Inf detected in mean_slope <<<")
+                print(f"  u min/max: {u.min()}, {u.max()}")
+                print(f"  l min/max: {l.min()}, {l.max()}")
+                print(f"  (u-l) min/max abs: {(u-l).abs().min()}, {(u-l).abs().max()}")
+                assert False, "Stopping due to NaN/Inf in mean_slope"
+
+            
             t_crit2 = u / 2.0
-            mean_slope = (u.reciprocal() - l.reciprocal()) / (u - l)
-            t_crit = (-mean_slope.reciprocal()).sqrt()
+            if torch.isnan(t_crit2).any() or torch.isinf(t_crit2).any():
+                print(f">>> NaN/Inf detected in t_crit2 <<<")
+                assert False, "Stopping due to NaN/Inf in t_crit2"
+                
+            #mean_slope = (u.reciprocal() - l.reciprocal()) / (u - l)
+            mean_slope_reciprocal = mean_slope.reciprocal()
+            if torch.isnan(mean_slope_reciprocal).any() or torch.isinf(mean_slope_reciprocal).any():
+                print(f">>> NaN/Inf detected in mean_slope_reciprocal <<<")
+                assert False, "Stopping due to NaN/Inf in mean_slope_reciprocal"
+
+            sqrt_arg = -mean_slope_reciprocal
+            if (sqrt_arg < 0).any(): print(f">>> Negative value detected in sqrt_arg <<<")
+            if torch.isnan(sqrt_arg).any() or torch.isinf(sqrt_arg).any():
+                print(f">>> NaN/Inf detected in sqrt_arg <<<")
+                assert False, "Stopping due to NaN/Inf in sqrt_arg"
+
+            #t_crit = (-mean_slope.reciprocal()).sqrt()
+            t_crit = sqrt_arg.sqrt()
+            if torch.isnan(t_crit).any() or torch.isinf(t_crit).any():
+                print(f">>> NaN/Inf detected in t_crit <<<")
+                assert False, "Stopping due to NaN/Inf in t_crit"
+
 
             if y_positive_constraint:
+                if torch.isnan(t_crit2 + 0.01).any(): print(">>> NaN detected in t_crit2 + 0.01 <<<")
                 t_opt = torch.max(t_crit, t_crit2 + 0.01)  # the + 0.01 is there to ensure strict positivity
             else:
                 t_opt = t_crit
 
-            lambdas = -t_opt.reciprocal().square()  # -1/t²
-            X = l.reciprocal() - lambdas * l    # here we have that t_opt >= t_crit, and therefore we have to use L since we connect to that endpoint
-            NEW_CONSTS = 0.5 * (t_opt.reciprocal() - lambdas * t_opt + X)
-            NEW_COEFFS = 0.5 * (lambdas * t_opt - t_opt.reciprocal() + X)
+            if torch.isnan(t_opt).any() or torch.isinf(t_opt).any():
+                print(f">>> NaN/Inf detected in t_opt <<<")
+                assert False, "Stopping due to NaN/Inf in t_opt"
+            
+            t_opt_reciprocal = t_opt.reciprocal()
+            if torch.isnan(t_opt_reciprocal).any() or torch.isinf(t_opt_reciprocal).any():
+                print(f">>> NaN/Inf detected in t_opt_reciprocal <<<")
+                assert False, "Stopping due to NaN/Inf in t_opt_reciprocal"
+
+            #lambdas = -t_opt.reciprocal().square()  # -1/t²
+            lambdas = -t_opt_reciprocal.square()
+
+            if torch.isnan(lambdas).any() or torch.isinf(lambdas).any():
+                print(f">>> NaN/Inf detected in lambdas <<<")
+                assert False, "Stopping due to NaN/Inf in lambdas"
+            
+            l_reciprocal = l.reciprocal()
+            if torch.isnan(l_reciprocal).any() or torch.isinf(l_reciprocal).any():
+                print(f">>> NaN/Inf detected in l_reciprocal <<<")
+                assert False, "Stopping due to NaN/Inf in l_reciprocal"
+
+
+            #X = l.reciprocal() - lambdas * l    # here we have that t_opt >= t_crit, and therefore we have to use L since we connect to that endpoint
+            X = l_reciprocal - lambdas * l
+            if torch.isnan(X).any() or torch.isinf(X).any():
+                print(f">>> NaN/Inf detected in X <<<")
+                assert False, "Stopping due to NaN/Inf in X"
+
+            term1 = lambdas * t_opt
+            term2 = t_opt_reciprocal # Reuse from above
+            term3 = X
+
+            if torch.isnan(term1).any() or torch.isinf(term1).any(): print(f">>> NaN/Inf detected in term1 (lambda*t_opt) <<<")
+            if torch.isnan(term2).any() or torch.isinf(term2).any(): print(f">>> NaN/Inf detected in term2 (t_opt_recip) <<<")
+            if torch.isnan(term3).any() or torch.isinf(term3).any(): print(f">>> NaN/Inf detected in term3 (X) <<<")
+
+
+
+            NEW_COEFFS = 0.5 * (term1 - term2 + term3)
+            if torch.isnan(NEW_COEFFS).any(): print(f">>> NaN calculated in NEW_COEFFS <<<")
+
+
+            #NEW_CONSTS = 0.5 * (t_opt.reciprocal() - lambdas * t_opt + X)
+            #NEW_COEFFS = 0.5 * (lambdas * t_opt - t_opt.reciprocal() + X)
 
         # INTERCEPT = (t_opt.reciprocal() - lambdas * t_opt)
         # isNan = torch.isnan(NEW_COEFFS[different_bool])
