@@ -39,3 +39,6 @@ root cause is the explosion of coefficient magnitudes during propagation with la
 concretize when it tries to compute norms of the huge coefficients (like the L2 norm overflow you saw) or during intermediate abstract transformer
 calculations when functions like exp operate on the very wide intermediate concrete bounds derived from large coefficients, causing overflow (inf)
 which then appears as invalid coefficients before concretize is called on that specific result.
+
+
+inside softmax (via reciprocal debug prints), the coefficients before the reciprocal call show explosive growth: 174 -> 182 -> 323 -> 284 -> 393 -> ... -> 3853 -> 21721 -> 8.08e8 -> 4.94e10.
