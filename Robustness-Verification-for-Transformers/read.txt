@@ -20,49 +20,17 @@ notes:
 
 - output shows the maximum possible absolute difference between the output logits of the unpruned model and the pruned model
 - k represents number of tokens kept
-- changes in pruning layer and k are reflected in the output as expected
-- eps doesn't seem to have any effect which is wrong 
-- baseline shows that when no pruning is done, output is 0 (this is correct)
 - can set --p value, but without defaults to 2
 
-paul's code:
+issues: 
 
-model.py
-main.py
-FirstKVerifier.py
+- AssertionError: Reciprocal: there are NaNs in the new COEFFS
+- AssertionError: Stopping due to NaN/Inf in t_crit2
+- AssertionError: Stopping due to NaN/Inf in special_width
+    - occured within concretize
+    - L2 norm calculation (get_width_for_special_terms applied to input_special_norm_errors) overflowed to inf
+    - debug print showed maximum absolute coefficient magnitude for coeff terms reached ~1.17e+26 before failure when eps=0.49 and p=2
 
-Parser.py lines 13-16
-Zonotope.py lines 201-209 and 1220-1274, commented out 212-223 and 904
+the coefficients of the input_special_norm_errors became enormous (~1.17e+26). When concretize was called, the internal step get_width_for_special_terms (calculating the L2 norm) overflowed because it had to square these huge numbers, resulting in NaN/Inf within the concretize function
 
-output of no pruning (baseline k=16, layer=5, eps=0.01)
-
-Max abs bound (Unpruned Path P): 0.513380
-Max abs bound (Pruned Path P'): 0.513380
-Max Diff Bound: 0.000000, Epsilon: 0.100000
-
-output of pruning 1 token (k=15, layer=5, eps=0.01)
-
-Max abs bound (Unpruned Path P): 0.513380
-Max abs bound (Pruned Path P'): 0.530449
-Max Diff Bound: 0.017069, Epsilon: 0.100000
-
-output of pruning 8 token (k=8, layer=5, eps=0.01)
-
-Max abs bound (Unpruned Path P): 0.513380
-Max abs bound (Pruned Path P'): 0.538270
-Max Diff Bound: 0.106999, Epsilon: 0.100000
-
-note: the max abs bounds are print statements from 147-153 and 161-167 from FirstKVerifier.py
-
-
-ISSUE:
-output of pruning 8 token (k=8, layer=5, eps=10.00) #eps is 100x but the outputs are still the same
-
-Max abs bound (Unpruned Path P): 0.513380
-Max abs bound (Pruned Path P'): 0.538270
-Max Diff Bound: 0.106999, Epsilon: 0.100000
-
-this shouldn't be the case, makes no sense^ 
-
-
-
+root cause is the explosion of coefficient magnitudes during propagation with large eps. this explosion leads to NaN/Inf either directly within concretize when it tries to compute norms of the huge coefficients (like the L2 norm overflow you saw) or during intermediate abstract transformer calculations when functions like exp operate on the very wide intermediate concrete bounds derived from large coefficients, causing overflow (inf) which then appears as invalid coefficients before concretize is called on that specific result.
