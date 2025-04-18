@@ -31,6 +31,11 @@ issues:
     - L2 norm calculation (get_width_for_special_terms applied to input_special_norm_errors) overflowed to inf
     - debug print showed maximum absolute coefficient magnitude for coeff terms reached ~1.17e+26 before failure when eps=0.49 and p=2
 
-the coefficients of the input_special_norm_errors became enormous (~1.17e+26). When concretize was called, the internal step get_width_for_special_terms (calculating the L2 norm) overflowed because it had to square these huge numbers, resulting in NaN/Inf within the concretize function
+the coefficients of the input_special_norm_errors became enormous (~1.17e+26). When concretize was called, the internal step
+get_width_for_special_terms (calculating the L2 norm) overflowed because it had to square these huge numbers, resulting in NaN/Inf within the
+concretize function
 
-root cause is the explosion of coefficient magnitudes during propagation with large eps. this explosion leads to NaN/Inf either directly within concretize when it tries to compute norms of the huge coefficients (like the L2 norm overflow you saw) or during intermediate abstract transformer calculations when functions like exp operate on the very wide intermediate concrete bounds derived from large coefficients, causing overflow (inf) which then appears as invalid coefficients before concretize is called on that specific result.
+root cause is the explosion of coefficient magnitudes during propagation with large eps. this explosion leads to NaN/Inf either directly within
+concretize when it tries to compute norms of the huge coefficients (like the L2 norm overflow you saw) or during intermediate abstract transformer
+calculations when functions like exp operate on the very wide intermediate concrete bounds derived from large coefficients, causing overflow (inf)
+which then appears as invalid coefficients before concretize is called on that specific result.
