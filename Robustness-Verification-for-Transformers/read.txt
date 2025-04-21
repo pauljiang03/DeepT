@@ -42,3 +42,5 @@ which then appears as invalid coefficients before concretize is called on that s
 
 
 inside softmax (via reciprocal debug prints), the coefficients before the reciprocal call show explosive growth: 174 -> 182 -> 323 -> 284 -> 393 -> ... -> 3853 -> 21721 -> 8.08e8 -> 4.94e10.
+
+print outputs of zonotopes prior to subtraction so find bounds of P and P'. print out output intervals 
