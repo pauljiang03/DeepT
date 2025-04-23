@@ -1314,12 +1314,12 @@ class Zonotope:
             self_exp = self
             other_exp = other
 
-        if self_exp.get_num_error_terms() != other_exp.get_num_error_terms():
-            print("Self has {self_exp.get_num_error_terms()}, Other has {other_exp.get_num_error_terms()}")
+        #if self_exp.get_num_error_terms() != other_exp.get_num_error_terms():
+            #print("Self has {self_exp.get_num_error_terms()}, Other has {other_exp.get_num_error_terms()}")
 
         shape_dim_index = 0 if self_exp.zonotope_w.ndim <= 3 else 1
-        if self_exp.zonotope_w.shape[shape_dim_index + 1:] != other_exp.zonotope_w.shape[shape_dim_index + 1:]:
-            print("{self_exp.zonotope_w.shape} and {other_exp.zonotope_w.shape}")
+        #if self_exp.zonotope_w.shape[shape_dim_index + 1:] != other_exp.zonotope_w.shape[shape_dim_index + 1:]:
+            #print("{self_exp.zonotope_w.shape} and {other_exp.zonotope_w.shape}")
 
         new_weights = self_exp.zonotope_w - other_exp.zonotope_w
 
