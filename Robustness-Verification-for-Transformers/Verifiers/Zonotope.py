@@ -521,7 +521,7 @@ class Zonotope:
                 if torch.isnan(inf_width).any() or torch.isinf(inf_width).any():
                     #print(">>> NaN/Inf detected in inf_width (inside concretize) <<<")
                     assert False, "Stopping due to NaN/Inf in inf_width"
-            else:
+            #else:
                 #print(">>> No infinity_errors found <<<")
 
             special_width = torch.zeros_like(center)
@@ -532,7 +532,7 @@ class Zonotope:
                     if torch.isnan(special_width).any() or torch.isinf(special_width).any():
                         #print(">>> NaN/Inf detected in special_width (inside concretize) <<<")
                         assert False, "Stopping due to NaN/Inf in special_width"
-                else:
+                #else:
                     #print(">>> No input_special_norm_errors found (or p != 1 or 2) <<<")
 
             lower = center - get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
