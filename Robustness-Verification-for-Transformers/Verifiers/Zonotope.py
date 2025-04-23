@@ -204,8 +204,6 @@ class Zonotope:
                 self.num_words,
                 self.word_embedding_size,
             ], device=args.device)'''
-            
-
             # fills biases (here we don't know the range of the embedding, so we don't do the "move eps" trick we did in the RIAI project)
             self.zonotope_w[0, :, :] = value
 
