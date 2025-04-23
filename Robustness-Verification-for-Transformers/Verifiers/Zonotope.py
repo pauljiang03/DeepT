@@ -195,37 +195,6 @@ class Zonotope:
 
             # in general, the only indices that should have weight=eps are [i + 1, perturbed_word, i]
             # which means that the i-th coordinate of the embedding of the perturbed word should depend on the i-th error term
-
-
-        '''else:
-            self.num_words, self.word_embedding_size = value.shape
-            num_input_features = self.num_words * self.word_embedding_size
-
-            start = 1 if start_perturbation is None else start_perturbation
-            end = self.num_words - 1 if end_perturbation is None else end_perturbation
-
-            #if self.args.all_words:
-                #self.num_error_terms = self.word_embedding_size * (end - start)
-            #else:
-                #self.num_error_terms = self.word_embedding_size
-            
-            self.num_error_terms = num_input_features
-
-
-            self.zonotope_w = torch.zeros([
-                1 + self.num_error_terms,  # Bias + error terms for the perturbed word
-                self.num_words,
-                self.word_embedding_size,
-            ], device=args.device)
-            if self.eps > 1e-12:
-                if self.num_error_terms == self.num_words * self.word_embedding_size:
-                    for flat_idx in range(self.num_error_terms):
-                        error_idx = flat_idx + 1 
-                        word_idx = flat_idx // self.word_embedding_size
-                        embed_idx = flat_idx % self.word_embedding_size
-
-                        if error_idx < self.zonotope_w.shape[0] and word_idx < self.zonotope_w.shape[1] and embed_idx < self.zonotope_w.shape[2]:
-                           self.zonotope_w[error_idx, word_idx, embed_idx] = self.eps'''
             if self.args.all_words:
                 error_index = 1
 
