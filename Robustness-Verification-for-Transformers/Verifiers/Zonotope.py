@@ -207,7 +207,7 @@ class Zonotope:
                     self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
             
         #self.num_input_error_terms: int = args.num_input_error_terms
-        self.num_input_error_terms: int = self.num_error_terms 
+        self.num_input_error_terms: int = args.num_input_error_terms
         self.num_input_error_terms_special_norm = self.num_input_error_terms if (self.p == 1 or self.p == 2) else 0
 
     def to_device(self, val: torch.Tensor):
