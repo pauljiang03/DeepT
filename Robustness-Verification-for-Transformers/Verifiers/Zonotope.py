@@ -502,9 +502,9 @@ class Zonotope:
             #print(">>> NaN/Inf detected in error_terms (start of concretize) <<<")
             if not torch.isinf(error_terms).all(): 
                 finite_mask = torch.isfinite(error_terms)
-                if finite_mask.any():
+                #if finite_mask.any():
                     #print(f">>> Max abs finite coeff in error_terms: {error_terms[finite_mask].abs().max()} <<<")
-                else:
+                #else:
                     #print(">>> No finite values in error_terms <<<")
             assert False, "Stopping due to NaN/Inf in error_terms"
         #print(f">>> Max abs coeff in initial error_terms: {error_terms.abs().max()} <<<") # Check magnitude regardless
@@ -519,7 +519,7 @@ class Zonotope:
                 #print(f">>> Max abs coeff in infinity_errors: {infinity_errors.abs().max()} <<<")
                 inf_width = get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
                 if torch.isnan(inf_width).any() or torch.isinf(inf_width).any():
-                    print(">>> NaN/Inf detected in inf_width (inside concretize) <<<")
+                    #print(">>> NaN/Inf detected in inf_width (inside concretize) <<<")
                     assert False, "Stopping due to NaN/Inf in inf_width"
             else:
                 #print(">>> No infinity_errors found <<<")
