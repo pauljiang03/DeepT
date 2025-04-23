@@ -15,9 +15,9 @@ class Parser(object):
         #parser.add_argument("--pruning_layer", type=int, required=True, help="0-indexed layer *after which* to apply pruning.")
         #parser.add_argument('--output_epsilon', type=float, required=True, help='Target epsilon bound for ||P - P_prime||')
 
-        #parser.add_argument("--k", type=int, help="Number of sequence tokens to keep for FirstK pruning (besides CLS).")
-        #parser.add_argument("--pruning_layer", type=int, help="0-indexed layer *after which* to apply pruning.")
-        #parser.add_argument('--output_epsilon', type=float, help='Target epsilon bound for ||P - P_prime||')
+        parser.add_argument("--k", type=int, help="Number of sequence tokens to keep for FirstK pruning (besides CLS).")
+        parser.add_argument("--pruning_layer", type=int, help="0-indexed layer *after which* to apply pruning.")
+        parser.add_argument('--output_epsilon', type=float, help='Target epsilon bound for ||P - P_prime||')
 
         # modes
         parser.add_argument("--train", action="store_true")
