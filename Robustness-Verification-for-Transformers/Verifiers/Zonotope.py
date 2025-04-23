@@ -183,6 +183,19 @@ class Zonotope:
                 self.num_words,
                 self.word_embedding_size,
             ], device=args.device)
+            # fills biases (here we don't know the range of the embedding, so we don't do the "move eps" trick we did in the RIAI project)
+            self.zonotope_w[0, :, :] = value
+
+            # Create error weights. Only the perturbed word has error terms, not the others
+            # zonotope[0, 2, 0]: first dim of 2nd word embedding should have bias equal to its value
+            # zonotope[1, 2, 0]: first dim of 2nd word embedding should have weight eps for its own error
+            # zonotope[2, 2, 0]: first dim of 2nd word embedding should have weight 0 for error of other perturbed dims
+            # zonotope[..., 2, 0]: first dim of 2nd word embedding should have weight 0 for error of other perturbed dims
+            # zonotope[embedding_dim + 1, 2, 0]: first dim of 2nd word embedding should have weight 0 for error of other perturbed dims
+
+            # in general, the only indices that should have weight=eps are [i + 1, perturbed_word, i]
+            # which means that the i-th coordinate of the embedding of the perturbed word should depend on the i-th error term
+
 
         '''else:
             self.num_words, self.word_embedding_size = value.shape
@@ -204,18 +217,6 @@ class Zonotope:
                 self.num_words,
                 self.word_embedding_size,
             ], device=args.device)'''
-            # fills biases (here we don't know the range of the embedding, so we don't do the "move eps" trick we did in the RIAI project)
-            self.zonotope_w[0, :, :] = value
-
-            # Create error weights. Only the perturbed word has error terms, not the others
-            # zonotope[0, 2, 0]: first dim of 2nd word embedding should have bias equal to its value
-            # zonotope[1, 2, 0]: first dim of 2nd word embedding should have weight eps for its own error
-            # zonotope[2, 2, 0]: first dim of 2nd word embedding should have weight 0 for error of other perturbed dims
-            # zonotope[..., 2, 0]: first dim of 2nd word embedding should have weight 0 for error of other perturbed dims
-            # zonotope[embedding_dim + 1, 2, 0]: first dim of 2nd word embedding should have weight 0 for error of other perturbed dims
-
-            # in general, the only indices that should have weight=eps are [i + 1, perturbed_word, i]
-            # which means that the i-th coordinate of the embedding of the perturbed word should depend on the i-th error term
 
 
 
