@@ -216,13 +216,8 @@ class Zonotope:
                 1 + self.num_error_terms,  # Bias + error terms for the perturbed word
                 self.num_words,
                 self.word_embedding_size,
-            ], device=args.device)'''
-
-
-
-
-
-            '''if self.eps > 1e-12:
+            ], device=args.device)
+            if self.eps > 1e-12:
                 if self.num_error_terms == self.num_words * self.word_embedding_size:
                     for flat_idx in range(self.num_error_terms):
                         error_idx = flat_idx + 1 
