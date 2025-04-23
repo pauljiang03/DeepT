@@ -1707,6 +1707,7 @@ class Zonotope:
             final_sum_exps_zonotope_w = torch.cat([sum_exp_diffs_w, new_error_terms_collapsed_good_shape], dim=1)
 
             zonotope_sum_exp_diffs = make_zonotope_new_weights_same_args(final_sum_exps_zonotope_w, source_zonotope=self, clone=False)
+            '''
             print(">>> DEBUG: Checking zonotope_sum_exp_diffs before reciprocal call <<<")
             if torch.isnan(zonotope_sum_exp_diffs.zonotope_w).any():
                 print(">>> NaN DETECTED in zonotope_sum_exp_diffs.zonotope_w <<<")
@@ -1719,6 +1720,7 @@ class Zonotope:
                 print(f"Inf indices: {inf_indices}")
                 assert False, "Stopping due to Inf in input to reciprocal"
             print(">>> DEBUG: zonotope_sum_exp_diffs seems OK before reciprocal call <<<")
+            '''
 
             # return zonotope_sum_exp_diffs
 
