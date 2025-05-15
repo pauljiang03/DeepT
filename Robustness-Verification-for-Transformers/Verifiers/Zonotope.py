@@ -145,9 +145,6 @@ class Zonotope:
         self.dual_p = dual_norm(p)
         self.eps = eps
 
-        #print(f"\n--- Inside Zonotope.__init__ ---")
-        #print(f"Received eps in Zonotope: {eps}")
-
         assert args.perturbed_words == 1 or self.args.attack_type == "synonym", "We assume there is only one perturbed word in the Zonotope implementation"
         self.perturbed_word_index = perturbed_word_index
 
@@ -169,18 +166,14 @@ class Zonotope:
                 self.word_embedding_size = zonotope_w.shape[3]
         else:
             self.num_words, self.word_embedding_size = value.shape
-            num_input_features = self.num_words * self.word_embedding_size
 
             start = 1 if start_perturbation is None else start_perturbation
             end = self.num_words - 1 if end_perturbation is None else end_perturbation
 
-            '''if self.args.all_words:
+            if self.args.all_words:
                 self.num_error_terms = self.word_embedding_size * (end - start)
             else:
-                self.num_error_terms = self.word_embedding_size'''
-            
-            self.num_error_terms = num_input_features
-
+                self.num_error_terms = self.word_embedding_size
 
             self.zonotope_w = torch.zeros([
                 1 + self.num_error_terms,  # Bias + error terms for the perturbed word
@@ -200,23 +193,6 @@ class Zonotope:
 
             # in general, the only indices that should have weight=eps are [i + 1, perturbed_word, i]
             # which means that the i-th coordinate of the embedding of the perturbed word should depend on the i-th error term
-
-
-
-
-
-            if self.eps > 1e-12:
-                if self.num_error_terms == self.num_words * self.word_embedding_size:
-                    for flat_idx in range(self.num_error_terms):
-                        error_idx = flat_idx + 1 
-                        word_idx = flat_idx // self.word_embedding_size
-                        embed_idx = flat_idx % self.word_embedding_size
-
-                        if error_idx < self.zonotope_w.shape[0] and word_idx < self.zonotope_w.shape[1] and embed_idx < self.zonotope_w.shape[2]:
-                           self.zonotope_w[error_idx, word_idx, embed_idx] = self.eps
-            
-            
-            '''
             if self.args.all_words:
                 error_index = 1
 
@@ -227,9 +203,8 @@ class Zonotope:
             else:
                 for i in range(1, 1 + self.num_error_terms):
                     self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
-            '''
-        #self.num_input_error_terms: int = args.num_input_error_terms
-        self.num_input_error_terms: int = self.num_error_terms 
+
+        self.num_input_error_terms: int = args.num_input_error_terms
         self.num_input_error_terms_special_norm = self.num_input_error_terms if (self.p == 1 or self.p == 2) else 0
 
     def to_device(self, val: torch.Tensor):
@@ -494,61 +469,14 @@ class Zonotope:
         else:
             raise Exception("Zonotope W should have 3 or 4 dimensions")
 
-        '''
-        if torch.isnan(center).any() or torch.isinf(center).any():
-            #print(">>> NaN/Inf detected in center (start of concretize) <<<")
-            assert False, "Stopping due to NaN/Inf in center"
-        if torch.isnan(error_terms).any() or torch.isinf(error_terms).any():
-            #print(">>> NaN/Inf detected in error_terms (start of concretize) <<<")
-            if not torch.isinf(error_terms).all(): 
-                finite_mask = torch.isfinite(error_terms)
-                if finite_mask.any():
-                    print(f">>> Max abs finite coeff in error_terms: {error_terms[finite_mask].abs().max()} <<<")
-                else:
-                    print(">>> No finite values in error_terms <<<")
-            assert False, "Stopping due to NaN/Inf in error_terms"
-        print(f">>> Max abs coeff in initial error_terms: {error_terms.abs().max()} <<<") # Check magnitude regardless
-        '''
         if self.error_term_range_low is None:
             assert self.error_term_range_high is None, "error_term_range_low is None but error_term_range_high is not None"
             sum_dim = 0 if self.zonotope_w.ndim <= 3 else 1  # if there are 4 dims, the error terms are in the dim 1 and not 0
             input_special_norm_errors, infinity_errors = self.get_input_special_errors_and_new_error_terms(error_terms)
-            '''
-            inf_width = torch.zeros_like(center)
-            if infinity_errors.numel() > 0:
-                print(f">>> Max abs coeff in infinity_errors: {infinity_errors.abs().max()} <<<")
-                inf_width = get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
-                if torch.isnan(inf_width).any() or torch.isinf(inf_width).any():
-                    print(">>> NaN/Inf detected in inf_width (inside concretize) <<<")
-                    assert False, "Stopping due to NaN/Inf in inf_width"
-            else:
-                print(">>> No infinity_errors found <<<")
-            
 
-            special_width = torch.zeros_like(center)
-            if self.p == 1 or self.p == 2:
-                if input_special_norm_errors.numel() > 0:
-                    print(f">>> Max abs coeff in input_special_norm_errors: {input_special_norm_errors.abs().max()} <<<")
-                    special_width = self.get_width_for_special_terms(input_special_norm_errors)
-                    if torch.isnan(special_width).any() or torch.isinf(special_width).any():
-                        print(">>> NaN/Inf detected in special_width (inside concretize) <<<")
-                        assert False, "Stopping due to NaN/Inf in special_width"
-                else:
-                    print(">>> No input_special_norm_errors found (or p != 1 or 2) <<<")
-            '''
             lower = center - get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
             upper = center + get_norm(infinity_errors, p=DUAL_INFINITY, dim=sum_dim)
-            '''
-            if torch.isnan(lower).any() or torch.isinf(lower).any():
-                print(">>> NaN/Inf detected in final lower bound (inside concretize) <<<")
-                assert False, "Stopping due to NaN/Inf in lower bound calculation"
-            if torch.isnan(upper).any() or torch.isinf(upper).any():
-                print(">>> NaN/Inf detected in final upper bound (inside concretize) <<<")
-                print(f"    center min/max: {center.min()}, {center.max()}")
-                print(f"    inf_width min/max: {inf_width.min()}, {inf_width.max()}")
-                print(f"    special_width min/max: {special_width.min()}, {special_width.max()}")
-                assert False, "Stopping due to NaN/Inf in upper bound calculation"
-            '''
+
             if self.p == 1 or self.p == 2:
                 width = self.get_width_for_special_terms(input_special_norm_errors)
                 lower = lower - width
@@ -956,8 +884,7 @@ class Zonotope:
                 error_1_coeffs = multiply_matrices_p_p(A_p, B_p, self.p)  # (e_errors_1, NA, NB)
                 new_weights += self.get_width_for_special_terms(error_1_coeffs, q=dual_norm(self.p))  # inplace
             else:
-                #assert self.p > 10, "there are no 1-norm or 2-norm bound error terms but the norm is 1 or 2"
-                pass
+                assert self.p > 10, "there are no 1-norm or 2-norm bound error terms but the norm is 1 or 2"
 
             def do_mixed_multiplication(inf_errors: torch.Tensor, p_errors: torch.Tensor, p: float, use_other_dot_product_ordering: bool, inf_is_self: bool):
                 if not use_other_dot_product_ordering:  # v2 is better
@@ -1272,65 +1199,6 @@ class Zonotope:
 
         return make_zonotope_new_weights_same_args(C, source_zonotope=self, clone=False)
 
-
-    def first_k_prune(self, k: int) -> "Zonotope":
-        prefix_token_count = 1
-        if self.zonotope_w.ndim == 3:
-            seq_dim = 1
-        else:
-            seq_dim = 2
-
-        current_seq_len = self.zonotope_w.shape[seq_dim]
-        max_seq_tokens = current_seq_len - prefix_token_count
-        if k < 0: k = 0
-        k = min(k, max_seq_tokens)
-        num_tokens_to_keep = prefix_token_count + k
-
-        if num_tokens_to_keep >= current_seq_len:
-            return self
-
-        slices = [slice(None)] * self.zonotope_w.ndim
-        slices[seq_dim] = slice(0, num_tokens_to_keep)
-        new_weights = self.zonotope_w[tuple(slices)].clone()
-
-        new_z = make_zonotope_new_weights_same_args(new_weights, source_zonotope=self, clone=False)
-        new_z.num_words = new_weights.shape[seq_dim]
-
-        return new_z
-
-
-    def subtract(self, other: "Zonotope") -> "Zonotope":
-
-        num_errors_self = self.get_num_error_terms()
-        num_errors_other = other.get_num_error_terms()
-
-        if num_errors_self > num_errors_other:
-            self_exp = self
-            other_exp = other.expand_error_terms_to_match_zonotope(self)
-        elif num_errors_other > num_errors_self:
-            self_exp = self.expand_error_terms_to_match_zonotope(other)
-            other_exp = other
-        else:
-            self_exp = self
-            other_exp = other
-
-        #if self_exp.get_num_error_terms() != other_exp.get_num_error_terms():
-            #print("Self has {self_exp.get_num_error_terms()}, Other has {other_exp.get_num_error_terms()}")
-
-        shape_dim_index = 0 if self_exp.zonotope_w.ndim <= 3 else 1
-        #if self_exp.zonotope_w.shape[shape_dim_index + 1:] != other_exp.zonotope_w.shape[shape_dim_index + 1:]:
-            #print("{self_exp.zonotope_w.shape} and {other_exp.zonotope_w.shape}")
-
-        new_weights = self_exp.zonotope_w - other_exp.zonotope_w
-
-        source_for_params = self if num_errors_self >= num_errors_other else other
-        new_z = make_zonotope_new_weights_same_args(new_weights, source_zonotope=source_for_params, clone=False)
-        new_z.error_term_range_low = None
-        new_z.error_term_range_high = None
-        return new_z
-
-
-    
     def divide(self, W: "Zonotope", use_original_reciprocal=True, y_positive_constraint=False) -> "Zonotope":
         if type(W) == Zonotope:
             if self.zonotope_w.ndim == 4:
@@ -1707,21 +1575,6 @@ class Zonotope:
             final_sum_exps_zonotope_w = torch.cat([sum_exp_diffs_w, new_error_terms_collapsed_good_shape], dim=1)
 
             zonotope_sum_exp_diffs = make_zonotope_new_weights_same_args(final_sum_exps_zonotope_w, source_zonotope=self, clone=False)
-            '''
-            print(">>> DEBUG: Checking zonotope_sum_exp_diffs before reciprocal call <<<")
-            if torch.isnan(zonotope_sum_exp_diffs.zonotope_w).any():
-                print(">>> NaN DETECTED in zonotope_sum_exp_diffs.zonotope_w <<<")
-                nan_indices = torch.where(torch.isnan(zonotope_sum_exp_diffs.zonotope_w))
-                print(f"NaN indices: {nan_indices}")
-                assert False, "Stopping due to NaN in input to reciprocal"
-            if torch.isinf(zonotope_sum_exp_diffs.zonotope_w).any():
-                print(">>> Inf DETECTED in zonotope_sum_exp_diffs.zonotope_w <<<")
-                inf_indices = torch.where(torch.isinf(zonotope_sum_exp_diffs.zonotope_w))
-                print(f"Inf indices: {inf_indices}")
-                assert False, "Stopping due to Inf in input to reciprocal"
-            print(">>> DEBUG: zonotope_sum_exp_diffs seems OK before reciprocal call <<<")
-            '''
-
             # return zonotope_sum_exp_diffs
 
             ### Step 4: Compute the inverse for all of these sums, thus obtaining all the softmax values
@@ -1978,8 +1831,6 @@ class Zonotope:
         Returns a new zonotope representing the reciprocal of the values in this zonotope.
         Requirement: x should be guaranteed to be positive
         """
-        #print(f">>> DEBUG: Entering reciprocal with original_implementation = {original_implementation} <<<")
-
         y_positive_constraint = True
 
         if self.zonotope_w.ndim == 4:
@@ -1987,11 +1838,6 @@ class Zonotope:
             return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
 
         l, u = self.concretize()
-
-        #numeric_stability_epsilon = 1e-11
-        #l = torch.clamp(l, min=numeric_stability_epsilon)
-        # Optional: Ensure upper bound is also positive if lower bound was clamped
-        #u = torch.clamp(u, min=numeric_stability_epsilon)
 
         if torch.min(l) <= epsilon:
             num_negative_elements = (l <= epsilon).float().sum().item()
@@ -2053,87 +1899,10 @@ class Zonotope:
             NEW_CONSTS = 0.5 * (T + B)
             NEW_COEFFS = 0.5 * (T - B)
         else:
-            '''
-            safe_denominator = u - l + 1e-12 # Add small epsilon to prevent division by zero
-            if (safe_denominator == 0).any(): print(">>> WARNING: safe_denominator is exactly zero for some elements <<<")
-
-            mean_slope = (u.reciprocal() - l.reciprocal()) / safe_denominator
-            
-            if torch.isnan(mean_slope).any() or torch.isinf(mean_slope).any():
-                print(f">>> NaN/Inf detected in mean_slope <<<")
-                print(f"  u min/max: {u.min()}, {u.max()}")
-                print(f"  l min/max: {l.min()}, {l.max()}")
-                print(f"  (u-l) min/max abs: {(u-l).abs().min()}, {(u-l).abs().max()}")
-                assert False, "Stopping due to NaN/Inf in mean_slope"
-            '''
-            
             t_crit2 = u / 2.0
-            '''
-            if torch.isnan(t_crit2).any() or torch.isinf(t_crit2).any():
-                print(f">>> NaN/Inf detected in t_crit2 <<<")
-                assert False, "Stopping due to NaN/Inf in t_crit2"
-            '''
             mean_slope = (u.reciprocal() - l.reciprocal()) / (u - l)
-            #mean_slope_reciprocal = mean_slope.reciprocal()
-            #if torch.isnan(mean_slope_reciprocal).any() or torch.isinf(mean_slope_reciprocal).any():
-                #print(f">>> NaN/Inf detected in mean_slope_reciprocal <<<")
-                #assert False, "Stopping due to NaN/Inf in mean_slope_reciprocal"
-            '''
-            sqrt_arg = -mean_slope_reciprocal
-            if (sqrt_arg < 0).any(): print(f">>> Negative value detected in sqrt_arg <<<")
-            if torch.isnan(sqrt_arg).any() or torch.isinf(sqrt_arg).any():
-                print(f">>> NaN/Inf detected in sqrt_arg <<<")
-                assert False, "Stopping due to NaN/Inf in sqrt_arg"
-            '''
             t_crit = (-mean_slope.reciprocal()).sqrt()
-            #t_crit = sqrt_arg.sqrt()
-            #if torch.isnan(t_crit).any() or torch.isinf(t_crit).any():
-                #print(f">>> NaN/Inf detected in t_crit <<<")
-                #assert False, "Stopping due to NaN/Inf in t_crit"
 
-            '''
-            if y_positive_constraint:
-                if torch.isnan(t_crit2 + 0.01).any(): print(">>> NaN detected in t_crit2 + 0.01 <<<")
-                t_opt = torch.max(t_crit, t_crit2 + 0.01)  # the + 0.01 is there to ensure strict positivity
-            else:
-                t_opt = t_crit
-
-            if torch.isnan(t_opt).any() or torch.isinf(t_opt).any():
-                print(f">>> NaN/Inf detected in t_opt <<<")
-                assert False, "Stopping due to NaN/Inf in t_opt"
-            
-            t_opt_reciprocal = t_opt.reciprocal()
-            if torch.isnan(t_opt_reciprocal).any() or torch.isinf(t_opt_reciprocal).any():
-                print(f">>> NaN/Inf detected in t_opt_reciprocal <<<")
-                assert False, "Stopping due to NaN/Inf in t_opt_reciprocal"
-
-            #lambdas = -t_opt.reciprocal().square()  # -1/t²
-            lambdas = -t_opt_reciprocal.square()
-
-            if torch.isnan(lambdas).any() or torch.isinf(lambdas).any():
-                print(f">>> NaN/Inf detected in lambdas <<<")
-                assert False, "Stopping due to NaN/Inf in lambdas"
-            
-            l_reciprocal = l.reciprocal()
-            if torch.isnan(l_reciprocal).any() or torch.isinf(l_reciprocal).any():
-                print(f">>> NaN/Inf detected in l_reciprocal <<<")
-                assert False, "Stopping due to NaN/Inf in l_reciprocal"
-
-
-            #X = l.reciprocal() - lambdas * l    # here we have that t_opt >= t_crit, and therefore we have to use L since we connect to that endpoint
-            X = l_reciprocal - lambdas * l
-            if torch.isnan(X).any() or torch.isinf(X).any():
-                print(f">>> NaN/Inf detected in X <<<")
-                assert False, "Stopping due to NaN/Inf in X"
-
-            term1 = lambdas * t_opt
-            term2 = t_opt_reciprocal # Reuse from above
-            term3 = X
-
-            if torch.isnan(term1).any() or torch.isinf(term1).any(): print(f">>> NaN/Inf detected in term1 (lambda*t_opt) <<<")
-            if torch.isnan(term2).any() or torch.isinf(term2).any(): print(f">>> NaN/Inf detected in term2 (t_opt_recip) <<<")
-            if torch.isnan(term3).any() or torch.isinf(term3).any(): print(f">>> NaN/Inf detected in term3 (X) <<<")
-            '''
             if y_positive_constraint:
                 t_opt = torch.max(t_crit, t_crit2 + 0.01)  # the + 0.01 is there to ensure strict positivity
             else:
@@ -2143,14 +1912,6 @@ class Zonotope:
             X = l.reciprocal() - lambdas * l    # here we have that t_opt >= t_crit, and therefore we have to use L since we connect to that endpoint
             NEW_CONSTS = 0.5 * (t_opt.reciprocal() - lambdas * t_opt + X)
             NEW_COEFFS = 0.5 * (lambdas * t_opt - t_opt.reciprocal() + X)
-            
-            
-            #NEW_CONSTS = 0.5 * (t_opt.reciprocal() - lambdas * t_opt + X)
-
-            #NEW_COEFFS = 0.5 * (term1 - term2 + term3)
-            #if torch.isnan(NEW_COEFFS).any(): print(f">>> NaN calculated in NEW_COEFFS <<<")
-
-            #NEW_COEFFS = 0.5 * (lambdas * t_opt - t_opt.reciprocal() + X)
 
         # INTERCEPT = (t_opt.reciprocal() - lambdas * t_opt)
         # isNan = torch.isnan(NEW_COEFFS[different_bool])
@@ -2698,20 +2459,15 @@ def process_values(input_zonotope_w: torch.Tensor, source_zonotope: "Zonotope", 
     # Middle shape: (A, 1 + num_error_terms, num_rows, num_values, num_values)
     # such that w[A, E, N, i, j] = rowN_j - rowN_i
     vals_w = input_zonotope_w.unsqueeze(-1)  # (A, 1 + num_error_terms, num_rows, num_values, 1)
-    if torch.isnan(vals_w).any(): print(">>> NaN found in vals_w <<<") # Check input after unsqueeze
-
     vals_w_repeated = vals_w.repeat(1, 1, 1, 1, num_values)  # (A, 1 + num_error_terms, num_rows, num_values, num_values)
-    if torch.isnan(vals_w_repeated).any(): print(">>> NaN found in vals_w_repeated <<<") # Check after repeat
 
     diffs_w = vals_w_repeated.transpose(3, 4) - vals_w_repeated
-    if torch.isnan(diffs_w).any(): print(">>> NaN found in diffs_w (after subtraction) <<<") # Check immediately after subtraction
-        
+
     if not keep_intermediate_zonotopes:
         del vals_w_repeated; cleanup_memory()
 
     # End shape: (1 + num_error_terms, A * num_rows, num_values * num_values)?
     diffs_w_reshaped = diffs_w.permute(1, 0, 2, 3, 4).reshape(1 + source_zonotope.num_error_terms, A * num_rows, num_values * num_values)
-    if torch.isnan(diffs_w_reshaped).any(): print(">>> NaN found in diffs_w_reshaped <<<") # Check after reshape
 
     zonotope_diffs = make_zonotope_new_weights_same_args(diffs_w_reshaped, source_zonotope, clone=False)
     cleanup_memory()
