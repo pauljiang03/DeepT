@@ -154,3 +154,230 @@ Verification failed: Propagation returned None.
 Total Verified: 10
 Verified Safe: 0
 Safety Rate: 0.00%
+
+
+----------
+
+
+
+
+Verifying 10 examples
+--- Verifying Sample 1/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 2/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 3/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 4/10 ---
+ERROR during abstract interpretation: reciprocal: Bounds must be positive but 299 elements out of 1156 were < 1e-12 (min value = -0.000009473723, iszero = False)
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1915, in reciprocal
+    assert False, message
+           ^^^^^
+AssertionError: reciprocal: Bounds must be positive but 299 elements out of 1156 were < 1e-12 (min value = -0.000009473723, iszero = False)
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 5/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 6/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 7/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 8/10 ---
+ERROR during abstract interpretation: reciprocal: Bounds must be positive but 1056 elements out of 1156 were < 1e-12 (min value = -0.000007193971, iszero = False)
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1915, in reciprocal
+    assert False, message
+           ^^^^^
+AssertionError: reciprocal: Bounds must be positive but 1056 elements out of 1156 were < 1e-12 (min value = -0.000007193971, iszero = False)
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 9/10 ---
+  Max abs bound (Unpruned Path P): 6.643897
+  Result: UNSAFE (Max Diff Bound: 11.463498, Epsilon: 0.100000)
+--- Verifying Sample 10/10 ---
+ERROR during abstract interpretation: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 143, in get_output_difference_bounds
+    Z_logits_P = self._propagate_path(Z_input.clone(), self.target_unified.unpruned_blocks, apply_pruning=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 266, in _propagate_path
+    Z_attn_output = self._bound_attention_custom(Z_normed_attn, attn_module, layer_num=i)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 327, in _bound_attention_custom
+    attention_probs = attention_scores.softmax(verbose=self.verbose, no_constraints=not add_constraint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1648, in softmax
+    zonotope_softmax = zonotope_sum_exp_diffs.reciprocal(original_implementation=not use_new_reciprocal, y_positive_constraint=add_value_positivity_constraint)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1905, in reciprocal
+    return self.remove_attention_heads_dim().reciprocal(original_implementation, y_positive_constraint).add_attention_heads_dim(A, clone=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 1990, in reciprocal
+    assert not torch.isnan(NEW_COEFFS[different_bool]).any(), "Reciprocal: there are NaNs in the new COEFFS, pre-condition not met"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Reciprocal: there are NaNs in the new COEFFS, pre-condition not met
+Verification failed: Propagation returned None.
+  Result: ERROR
