@@ -1,0 +1,13 @@
+subtract every element in input by max to normalize magnitude.
+
+clamp?
+
+upstream issue. 
+
+softmax print max and min value
+
+print data related to input values related to softmax
+
+print relevant values and see where it happens, diagnostic problem, dump statistics
+
+dump t_opt could be too small or too large which can lead to overflow
