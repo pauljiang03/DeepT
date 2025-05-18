@@ -1,0 +1,156 @@
+Starting verification...
+Verifying 10 examples
+--- Verifying Sample 1/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 2/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 3/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 4/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 5/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 6/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 7/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 8/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 9/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verifying Sample 10/10 ---
+ERROR during abstract interpretation: index 16 is out of bounds for dimension 2 with size 16
+Traceback (most recent call last):
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 140, in get_output_difference_bounds
+    Z_input = self._bound_input_unified(image, input_eps)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/FirstKVerifier.py", line 210, in _bound_input_unified
+    bounds = Zonotope(self.args, p=self.p, eps=eps_scaled,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiang861/DeepT/Robustness-Verification-for-Transformers/Verifiers/Zonotope.py", line 205, in __init__
+    self.zonotope_w[i, perturbed_word_index, i - 1] = self.eps
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 16 is out of bounds for dimension 2 with size 16
+Verification failed: Propagation returned None.
+  Result: ERROR
+--- Verification Summary ---
+Total Verified: 10
+Verified Safe: 0
+Safety Rate: 0.00%
