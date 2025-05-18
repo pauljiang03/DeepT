@@ -166,6 +166,8 @@ class Zonotope:
                 self.word_embedding_size = zonotope_w.shape[3]
         else:
             self.num_words, self.word_embedding_size = value.shape
+            num_input_features = self.num_words * self.word_embedding_size
+
 
             start = 1 if start_perturbation is None else start_perturbation
             end = self.num_words - 1 if end_perturbation is None else end_perturbation
