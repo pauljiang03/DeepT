@@ -170,10 +170,13 @@ class Zonotope:
             start = 1 if start_perturbation is None else start_perturbation
             end = self.num_words - 1 if end_perturbation is None else end_perturbation
 
-            if self.args.all_words:
+            '''if self.args.all_words:
                 self.num_error_terms = self.word_embedding_size * (end - start)
             else:
-                self.num_error_terms = self.word_embedding_size
+                self.num_error_terms = self.word_embedding_size'''
+            
+            self.num_error_terms = num_input_features
+
 
             self.zonotope_w = torch.zeros([
                 1 + self.num_error_terms,  # Bias + error terms for the perturbed word
